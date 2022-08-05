@@ -3,6 +3,15 @@
 .Rhistory
 .RData
 .Ruserdata
-
-# avoid adding html
+.Rproj
+# avoid adding
 *.html
+*.zip
+*.tfw
+*.tif
+*.xml
+*.dbf
+*.cpg
+*.txt
+# avoid csv not to leak occ data
+*.csv
