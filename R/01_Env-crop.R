@@ -62,13 +62,14 @@ setwd(path)
 ## Occurrence records ####
 # Read the csv
 occ_raw <- read.csv('data/raw/occ/presence_absence.csv')
+occ_pres <- occ_raw %>% filter(charinus == 1) # only presence data, dropping absences
 
 # Turn the object into a SpatialPoints dataframe
-coordinates(occ_raw) <- ~long + lat
-proj4string(occ_raw) <- projection(raster())
+coordinates(occ_pres) <- ~long + lat
+proj4string(occ_pres) <- projection(raster())
 
 # Generate Bounding Box around Occurrence Records ####
-occ_buffer <- gBuffer(spgeom = occ_raw, byid = T,
+occ_buffer <- gBuffer(spgeom = occ_pres, byid = T,
                       width = 2, quadsegs = 100, # radius = 1 = 100km
                       capStyle = 'ROUND' , joinStyle = 'ROUND')
 # Crop Environmental Layers #####
