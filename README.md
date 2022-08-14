@@ -11,13 +11,14 @@ project/
 *    │   │   ├── occ
 *    │   │   └── env
 *    │   └── processed
+     │       └── env
      ├── docs/
 *    ├── figs/
      ├── R/
 *    ├── output/
 *    └── README.md
 ```
-In the `R` directory you will find the scripts.
+In the `R/` directory you will find the scripts.
 
 The occurrence data in the `/data/raw/occ` directory has been acquired from Gustavo Silva de Miranda's personal database, and has been omitted intentionally, while I don't get his authorization to release it.
 
