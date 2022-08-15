@@ -11,10 +11,11 @@ project/
 *    │   │   ├── occ
 *    │   │   └── env
 *    │   └── processed
-     │       └── env
-     ├── docs/
+*    │       ├── occ
+*    │       └── env
+*    ├── docs/
 *    ├── figs/
-     ├── R/
+*    ├── R/
 *    ├── output/
 *    └── README.md
 ```
