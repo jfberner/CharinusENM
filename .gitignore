@@ -6,7 +6,7 @@
 .Rproj
 # avoid adding
 *.html
-#*.zip
+*.zip
 #*.tfw
 #*.tif
 #*.xml
