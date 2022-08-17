@@ -4,7 +4,7 @@
 # In this script we will build the models for the present and save them as rda objects for later use in other scripts
 # First version 2022 Aug 15
 # Author: João Frederico Berner
-# --------------------------------------------------#
+#--------------------------------------------------#
 
 # Libs #####
 # remotes::install_github(babaknaimi/sdm)
@@ -23,43 +23,41 @@ envpres <- dir(path = 'data/processed/envcropped/Present/', pattern = ".tif$", f
 envpres <- raster::stack(envpres)
 
 ## Occurrence Data #####
-occ_train <- readOGR('data/processed/shapefiles/train.shp') # only presence data, dropping absences
-occ_test <- readOGR('data/processed/shapefiles/test.shp')
-
-# Turn the object into a SpatialPoints dataframe
-coordinates(occ_pres) <- ~long + lat
-proj4string(occ_pres) <- projection(raster())
+occ_train <- rgdal::readOGR('data/processed/shapefiles/train.shp') # only presence data, dropping absences
+occ_test <- rgdal::readOGR('data/processed/shapefiles/test.shp')
 
 # Model Build #####
 
 d_occ <- sdmData(formula = charinus~., 
                  train=occ_train, test = occ_test, predictors = envpres,
-                 bg = 18, method = 'eRandom')
+                 bg = 18, method = 'eRandom') # Create sdmData object
 
 m_occ <- sdm(formula = charinus~.,data = d_occ,
              methods = c('svm', 'maxent', 'brt', 'bioclim', 'domain'),
-             replication = c('cv'), n=5) 
+             replication = c('bootstrapping'), n=5) # Create model
 
-# gui(m_occ)
+if (!dir.exists("data/processed/model-build/model-object/")) dir.create("data/processed/model-build/model-object/", recursive = TRUE) # Create this folder
 
-if (!dir.exists("data/processed/model-build/predictions/")) dir.create("data/processed/model-build/predictions/", recursive = TRUE)
+sdm::write.sdm(m_occ, "data/processed/model-build/model-object/model", overwrite = T) # Save the model object into RDS
 
-p_occ <- predict(m_occ, envpres,
-                  'data/processed/model-build/predictions.present.img',
-                  mean = T, overwrite = T)
+# gui(m_occ) # if you want to see model results
+
+if (!dir.exists("data/processed/model-build/predictions/")) dir.create("data/processed/model-build/predictions/", recursive = TRUE) # Create this folder
+
+p_occ <- predict(m_occ, newdata = envpres, # new data is the environment in which we want to predict
+                 filename = 'data/processed/model-build/predictions/predictions.present-nonames.tif',
+                 mean = T, prj = T, overwrite = T, nc = 4) 
+
+# This creates a file in the specified folder BUT the file doesn't retain the layer names, which will be super important for us to distinguish among methods. To do so:
+
+p_occ_stack <- raster::stack(p_occ) #convert rasterBrick to rasterStack
+p_occ_spatraster <- terra::rast(p_occ_stack) #convert rasterStack to SpatRaster
+
+terra::writeRaster(x = p_occ_spatraster, 
+                    filename = 'data/processed/model-build/predictions/predictions.present-all-algorithms.tif',
+                    overwrite = TRUE) # Using terra package because it retains layer names
 
 
-# Visualization aid during script build #####
-library(mapview)
-library(leafem)
-library(leaflet)
-library(mapdeck)
-list <- list(occ_pres, envpres)
-menv <- mapview::mapview(envpres)
-mocc <- mapview::mapview(occ_pres)
-mapviewOptions(platform = "mapdeck")
-menv + mocc
-leaflet() %>% addFeatures(menv, occ_pres)
-mapview(list, 
-        col.regions = mapviewGetOption("raster.palette"),
-        color = mapviewGetOption("vector.palette"))
+# when you read it, make sure to so as:
+# pocc <- terra::rast(x = 'data/processed/model-build/predictions/predictions.present-all-algorithms.tif')
+# pocc %>% raster::brick()
