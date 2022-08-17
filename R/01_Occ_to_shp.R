@@ -20,8 +20,8 @@ library(rgdal)
 # Load Data #####
 occ_raw <- read.csv('data/raw/occ/presence_absence.csv')
 
-occ_train <- occ_raw[1:18,] # Presence data, leaving 6 presences behind, dropping absences
-occ_test <- occ_raw[19:29,] # 6 presences, 6 absences
+occ_train <- occ_raw[1:17,] # Presence data, leaving 6 presences behind, dropping absences
+occ_test <- occ_raw[18:29,] # 6 presences, 6 absences
 
 
 # Turn the objects into a SpatialPointsDataFrames ####
