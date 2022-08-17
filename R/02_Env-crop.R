@@ -81,30 +81,26 @@ raster::writeRaster(enveh, filename = 'data/processed/envcropped/EH/eh.tif',
                     prj = T, overwrite = T, bylayer = T, suffix = c('Bio1', 'Bio2', 'Bio12', 'Bio15'))
 ##### YDS - Younger Dryas Stadial - 12.9 - 11.7ky
 if (!dir.exists("data/processed/envcropped/YDS")) dir.create("data/processed/envcropped/YDS", recursive = TRUE)
-raster::writeRaster(envyds, filename = 'data/processed/envcropped/YDS/yds.tif', prj = T, overwrite = T, bylayer = T)
 
 raster::writeRaster(envyds, filename = 'data/processed/envcropped/YDS/yds.tif', 
                     prj = T, overwrite = T, bylayer = T, suffix = c('Bio1', 'Bio2', 'Bio12', 'Bio15'))
 ##### BA -  Bølling-Allerød - 14.7 - 12.9ky
 if (!dir.exists("data/processed/envcropped/BA")) dir.create("data/processed/envcropped/BA", recursive = TRUE)
-raster::writeRaster(envba, filename = 'data/processed/envcropped/BA/ba.tif', prj = T, overwrite = T, bylayer = T)
 
 raster::writeRaster(envba, filename = 'data/processed/envcropped/BA/ba.tif', 
                     prj = T, overwrite = T, bylayer = T, suffix = c('Bio1', 'Bio2', 'Bio12', 'Bio15'))
 ##### HS1 - Heirich Stadial 1 - 17.0 - 14.7ky
 if (!dir.exists("data/processed/envcropped/HS1")) dir.create("data/processed/envcropped/HS1", recursive = TRUE)
-raster::writeRaster(envhs1, filename = 'data/processed/envcropped/HS1/hs1.tif', prj = T, overwrite = T, bylayer = T)
 
 raster::writeRaster(envhs1, filename = 'data/processed/envcropped/HS1/hs1.tif', 
                     prj = T, overwrite = T, bylayer = T, suffix = c('Bio1', 'Bio2', 'Bio12', 'Bio15'))
 ##### LGM - Last Glacial Maximum - 130ky
 if (!dir.exists("data/processed/envcropped/LGM")) dir.create("data/processed/envcropped/LGM", recursive = TRUE)
-raster::writeRaster(envlgm, filename = 'data/processed/envcropped/LGM/lgm.tif', prj = T, overwrite = T, bylayer = T)
 
 raster::writeRaster(envlgm, filename = 'data/processed/envcropped/LGM/lgm.tif', 
                     prj = T, overwrite = T, bylayer = T, suffix = c('Bio1', 'Bio2', 'Bio12', 'Bio15'))
 ##### Present - WorldClim v2 1970-2000 average
 if (!dir.exists("data/processed/envcropped/Present")) dir.create("data/processed/envcropped/Present", recursive = TRUE)
-raster::writeRaster(envpres, filename = 'data/processed/envcropped/Present/present.tif', prj = T, overwrite = T, bylayer = T)
+
 raster::writeRaster(envpres, filename = 'data/processed/envcropped/Present/present.tif', 
                     prj = T, overwrite = T, bylayer = T, suffix = c('Bio1', 'Bio2', 'Bio12', 'Bio15'))
