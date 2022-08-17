@@ -13,6 +13,7 @@
 #*.dbf
 #*.cpg
 #*.txt
+*.shp
 # avoid csv not to leak occ data
 *.csv
 /data/raw/env/
