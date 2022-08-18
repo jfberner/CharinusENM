@@ -34,7 +34,7 @@
 #' out.preds <- sdm_to_output.mods(env = env.pres, long = 'x',lat = 'y', algorithms = c('svm', 'maxent','bioclim','domain'), predict_object = pocc)
 #'           
 
-sdm_to_output.mods <- function(env, long, lat, algorithms, predict_object){
+sdm_to_output.mods <- function(env, algorithms, predict_object){
   algorithms <- as.list(algorithms)
   env.data.frame <- as.data.frame(env, row.names=NULL, na.rm=F,xy=F,long=F)
   p.data.frame <- as.data.frame(predict_object, row.names=NULL, na.rm=F,xy=T,long=F)
