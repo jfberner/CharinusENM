@@ -38,8 +38,8 @@ proj4string(occ_test) <- projection(raster())
 if (!dir.exists('/data/processed/shapefiles/')) dir.create("data/processed/shapefiles/", recursive = TRUE)
 
 
-writeOGR(obj=occ_raw, dsn="data/processed/shapefiles/raw.shp", layer=c("species","uncertainty"), driver="ESRI Shapefile", overwrite_layer = T)
+writeOGR(obj=occ_raw, dsn="data/processed/shapefiles/raw.shp", layer=c("species"), driver="ESRI Shapefile", overwrite_layer = T)
 
-writeOGR(obj=occ_train, dsn="data/processed/shapefiles/train.shp", layer=c("species","uncertainty"), driver="ESRI Shapefile", overwrite_layer = T)
+writeOGR(obj=occ_train, dsn="data/processed/shapefiles/train.shp", layer=c("species"), driver="ESRI Shapefile", overwrite_layer = T)
 
-writeOGR(obj=occ_test, dsn="data/processed/shapefiles/test.shp", layer=c("species","uncertainty"), driver="ESRI Shapefile", overwrite_layer = T)
+writeOGR(obj=occ_test, dsn="data/processed/shapefiles/test.shp", layer=c("species"), driver="ESRI Shapefile", overwrite_layer = T)
