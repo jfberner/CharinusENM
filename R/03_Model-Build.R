@@ -27,18 +27,21 @@ occ_train <- rgdal::readOGR('data/processed/shapefiles/train.shp') # only presen
 occ_test <- rgdal::readOGR('data/processed/shapefiles/test.shp')
 
 # Model Build #####
+if (!dir.exists("data/processed/model-build/model-object/")) dir.create("data/processed/model-build/model-object/", recursive = TRUE) # Create this folder for the outputs
 
+# Prepare the data:
 d_occ <- sdmData(formula = charinus~., 
                  train=occ_train, test = occ_test, predictors = envpres,
                  bg = 18, method = 'eRandom') # Create sdmData object
+# And save it, we'll use it later
+sdm::write.sdm(d_occ, "data/processed/model-build/model-object/model-data", overwrite = T)
 
+# Build the model:
 m_occ <- sdm(formula = charinus~.,data = d_occ,
              methods = c('svm', 'maxent', 'brt', 'bioclim', 'domain'),
              replication = c('bootstrapping'), n=5) # Create model
-
-if (!dir.exists("data/processed/model-build/model-object/")) dir.create("data/processed/model-build/model-object/", recursive = TRUE) # Create this folder
-
-sdm::write.sdm(m_occ, "data/processed/model-build/model-object/model", overwrite = T) # Save the model object into RDS
+# And save it, we'll use it later
+sdm::write.sdm(m_occ, "data/processed/model-build/model-object/model", overwrite = T) # Save the model object into RDS format, extension.sdm
 
 # gui(m_occ) # if you want to see model results
 
@@ -60,4 +63,4 @@ terra::writeRaster(x = p_occ_spatraster,
 
 # when you read it, make sure to so as:
 # pocc <- terra::rast(x = 'data/processed/model-build/predictions/predictions.present-all-algorithms.tif')
-# pocc %>% raster::brick()
+# pocc <- raster::stack()
