@@ -5,7 +5,7 @@
 .Ruserdata
 .Rproj
 # avoid adding
-*.html
+#*.html
 *.zip
 #*.tfw
 #*.tif
