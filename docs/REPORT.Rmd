@@ -115,7 +115,7 @@ The evaluation of these final models (`R/07_Final-Model_Evaluation.R`) and their
 ### **Predictions**
 With the final models at hand, we projected them to the PaleoClim layers (`08/Predictions-Past.R`), and finally ensembled the two models, wheighing by the AUC values. The last step was binarizing the outputs of the ensembled projections by a 0.4 threshold (`09_Ensemble_Preds.R`). 
 
-As a final step, we projected all layers along with the occurrence records on the following map (`R/10_leaflet-map.R`)
+As a final step, we projected all layers along with the occurrence records on the following interactive map (`R/10_leaflet-map.R`) :
 
 
 ```{r leaflet-requirements, include=FALSE}
@@ -296,9 +296,6 @@ leaflet() %>%
         }
     ")
 ```
-
-```{r}
-
-```
+Interactive map of ensembled presence/absence predictions.
 
 #### **References**
