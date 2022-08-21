@@ -88,7 +88,6 @@ At a 2.5min resolution (~5km at the equator), as there are no finer resolution s
 Models were built `R/03_Model-Build.R` using the aforementioned train and test data. We chose five algorithms to build them (SVM, MaxEnt, BRT, BioClim and Domain-dismo), with five bootstrap replicas each. All BRT models failed.
 
 #### Model Outputs {.tabset}
-<center>
 ##### MaxEnt Map output
 ```{r echo=FALSE, fig.cap= paste("Map output of MaxEnt model, as an example. From `04_Model-evaluation.R`"), fig.alt= paste("Map of suitability regions as defined by the MaxEnt algorithm. The map of the south eastern region of Brazil is in light gray, suitable areas are in a gradient from suitable to non suitable, black to light gray respectively. Occurrence records are depicted by red dots."), out.width="100%"}
 knitr::include_graphics("../figs/aocc/maxent_aocc_map.png")
@@ -108,7 +107,6 @@ model <- sdm::read.sdm('../data/processed/model-build/model-object/model.sdm')
 model
 ```
 
-</center>
 ### **Assessment**
 #### Model Evaluation
 We then evaluate these models by  with the accumulation of occurrences curve [@jimenezLeavingAreaReceiving2020] `R/04_Model-evaluation.R`, alongside the mean AUC score `05_AUC_values.R` (which is less problematic since we tested with absence data).
@@ -172,11 +170,11 @@ shape_lgm <- st_transform(ens_lgm, CRS("+proj=longlat +datum=WGS84 +no_defs"))
 centroid_lon <- round(coordinates(as(extent(shape_pres), "SpatialPolygons"))[1],digits = 2) # get the longitude of centroid of pred object
 centroid_lat <- round(coordinates(as(extent(shape_pres), "SpatialPolygons"))[2],digits = 2) # get the latitude of centroid of pred object
 ```
-<center>
-```{r leaflet, echo=FALSE}
+
+```{r leaflet, echo=FALSE, fig.width=10, fig.height=10}
 leaflet() %>% 
   addTiles() %>% 
-  setView( lng = centroid_lon, lat = centroid_lat, zoom = 6) %>% 
+  setView( lng = centroid_lon, lat = centroid_lat, zoom = 7) %>% 
   addProviderTiles("Esri.WorldImagery") %>%
   addPolygons(data = shape_pres,
               label = 'Present Suitable Area',
@@ -310,5 +308,5 @@ leaflet() %>%
     ")
 ```
 Interactive map of ensembled presence/absence predictions. (Only works in the html version of this document)
-</center>
+
 #### **References**
