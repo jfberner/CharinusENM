@@ -4,9 +4,10 @@ author: "João Frederico Berner"
 first-date: 2022-Aug-16
 last-date: "`r Sys.Date()`"
 output: 
+#  pdf_document: default
   html_document:
     theme: 
-      bootswatch: readable
+      rmdformats: material
 bibliography: ../citation/refs.bib
 csl: ../citation/apa-old-doi-prefix.csl
 ---
@@ -47,7 +48,7 @@ library(TeachingDemos)
 char2seed('Charinus')
 ```
 
-###### Andrea and Sara: I know you wanted something simple and small, but I've decided to catch up on some work I owed my co-advisor, and implement some things I had been playing around with. On top of that, I also really wanted to make it reproducible, and the scripts I had from my dissertation **were not**, so this was all pretty much from scratch. Sorry if it got too long. 
+###### Andrea and Sara: I know you wanted something simple and small, but I've decided to catch up on some work I owed my co-advisor, and implement some things I had been playing around with. On top of that, I also really wanted to make it reproducible, and the scripts I had from my dissertation **were not**, so this was all pretty much from scratch. Also, this is in html and not pdf for two reasons: alternative text in the figures and the final plot, which doesn't work with pdf and I feel is the best way to explore ENM outputs in detail. 
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
@@ -87,12 +88,18 @@ At a 2.5min resolution (~5km at the equator), as there are no finer resolution s
 Models were built `R/03_Model-Build.R` using the aforementioned train and test data. We chose five algorithms to build them (SVM, MaxEnt, BRT, BioClim and Domain-dismo), with five bootstrap replicas each. All BRT models failed.
 
 #### Model Outputs {.tabset}
+<center>
 ##### MaxEnt Map output
- ![Figure 1 = Output of MaxEnt model, as en example. From `04_Model-evaluation.R`](../figs/aocc/maxent_aocc_map.png)
+```{r echo=FALSE, fig.cap= paste("Map output of MaxEnt model, as an example. From `04_Model-evaluation.R`"), fig.alt= paste("Map of suitability regions as defined by the MaxEnt algorithm. The map of the south eastern region of Brazil is in light gray, suitable areas are in a gradient from suitable to non suitable, black to light gray respectively. Occurrence records are depicted by red dots."), out.width="100%"}
+knitr::include_graphics("../figs/aocc/maxent_aocc_map.png")
+```
+
  
 ##### MaxEnt Environmental output
- ![Figure 1 = Output of MaxEnt model, occurrence records and suitability in environmental space. From `04_Model-evaluation.R`](../figs/aocc/maxent_aocc_env.png)
- 
+```{r echo=FALSE, fig.cap= paste("Output of MaxEnt model, occurrence records and suitability regions in environmental space. From `04_Model-evaluation.R`"), fig.alt= paste("Twelve plots in a four by four grid, where the diagonal defines which environmental predictors are represented in the axes of the plots. Plots have a blue background and white dots represent all the regions in geographic space of our study area. Red dots represent the occurrence records. Suitable areas are defined by black dots, in a gradient going to unsuitable in shades of grey."), out.width="100%"}
+knitr::include_graphics("../figs/aocc/maxent_aocc_env.png")
+```
+
 ##### Model output
 ```{r echo=TRUE, fig.height=4, fig.width=4}
 
@@ -100,22 +107,28 @@ model <- sdm::read.sdm('../data/processed/model-build/model-object/model.sdm')
 
 model
 ```
+
+</center>
 ### **Assessment**
 #### Model Evaluation
 We then evaluate these models by  with the accumulation of occurrences curve [@jimenezLeavingAreaReceiving2020] `R/04_Model-evaluation.R`, alongside the mean AUC score `05_AUC_values.R` (which is less problematic since we tested with absence data).
 
 To run the [accum.occ](https://github.com/LauraJim/SDM-hyperTest/blob/master/Accum_curve_occ.R)() function, the sdm and the predict object had to be manipulated alongside the occurrence records and the environment used in prediction. We built two functions to prepare the data (`R/sdm_to_occ.pnts.R` & `R/sdm_to_output.mod.R`), regarding the two objects required by the AOcC function. The outputs of [accum.occ](https://github.com/LauraJim/SDM-hyperTest/blob/master/Accum_curve_occ.R)() and [comp.accplot](https://github.com/LauraJim/SDM-hyperTest/blob/master/compare_models.R)() are in `figs/aocc/`.
 
- ![Figure 2 = accumulation of occurrences curves. A plot with the raster cells ranked from highest prediction to lowest in the x axis, and cummulative occurences in the y axis. The plot shows that the bioclim algorithm finds all occurrences in less cells than others, followed by max ent, then svm, and finally domain.](../figs/aocc/01_model-comparison.png)
+<center>
+```{r, echo = FALSE, fig.cap = paste("Accumulation of occurrences curves comparing the performance of the four tested algorithms."), fig.alt = paste("A plot with the raster cells ranked from highest prediction to lowest in the x axis, and cummulative occurences in the y axis. Occurrences are marked where the algorithm predicted suitable area. There are four accumulation of occurrences, respective to each algorithm used in model build. There's a red line in the 1 to 1 diagonal that represents what a random model would find, with confidence intervals. The plot shows that the bioclim algorithm finds all occurrences in less cells than others, followed by max ent, then svm, and finally domain."), out.width="100%"}
+knitr::include_graphics('../figs/aocc/01_model-comparison.png')
+```
+</center>
 
-We then selected the two best performing algorithms (SVM and MaxEnt) according to these two metrics to build a second round of models with 25 replicas for each algorithm `R/06_Final-Model`.
+We then selected the two best performing algorithms (SVM and MaxEnt) according to these two metrics to build a second round of models with 25 replicas for each algorithm `R/06_Final-Model.R`.
 
-The evaluation of these final models (`R/07_Final-Model_Evaluation.R`) and their outputs and predictions are stored in `R/data/processed/final-model-build/`.
+The evaluation of these final models (`R/07_Final-Model_Evaluation.R`) and their outputs and predictions are stored in `data/processed/final-model-build/`.
 
 ### **Predictions**
 With the final models at hand, we projected them to the PaleoClim layers (`08/Predictions-Past.R`), and finally ensembled the two models, wheighing by the AUC values. The last step was binarizing the outputs of the ensembled projections by a 0.4 threshold (`09_Ensemble_Preds.R`). 
 
-As a final step, we projected all layers along with the occurrence records on the following interactive map (`R/10_leaflet-map.R`) :
+As a final step, we projected all layers along with the occurrence records on the following interactive map (`R/10_leaflet-map.R`):
 
 
 ```{r leaflet-requirements, include=FALSE}
@@ -159,7 +172,7 @@ shape_lgm <- st_transform(ens_lgm, CRS("+proj=longlat +datum=WGS84 +no_defs"))
 centroid_lon <- round(coordinates(as(extent(shape_pres), "SpatialPolygons"))[1],digits = 2) # get the longitude of centroid of pred object
 centroid_lat <- round(coordinates(as(extent(shape_pres), "SpatialPolygons"))[2],digits = 2) # get the latitude of centroid of pred object
 ```
-
+<center>
 ```{r leaflet, echo=FALSE}
 leaflet() %>% 
   addTiles() %>% 
@@ -296,6 +309,6 @@ leaflet() %>%
         }
     ")
 ```
-Interactive map of ensembled presence/absence predictions.
-
+Interactive map of ensembled presence/absence predictions. (Only works in the html version of this document)
+</center>
 #### **References**
